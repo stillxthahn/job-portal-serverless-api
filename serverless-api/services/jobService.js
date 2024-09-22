@@ -60,10 +60,9 @@ const updateJob = async (req, res) => {
    "Access-Control-Allow-Origin": "*",
    "Access-Control-Allow-Credentials": true,
   });
-  res.json(job);
-  console.log("RES", res);
+  res.json(req.body);
  } catch (error) {
-  res.status(500).json({ error });
+  res.status(500).json({ error: error.message });
  }
 };
 

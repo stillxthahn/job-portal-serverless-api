@@ -62,10 +62,9 @@ const getCV = async (req, res) => {
 };
 
 const createCV = async (req, res) => {
- const cv = { id: Date.now(), ...req.body };
  const params = {
   TableName: CVS_TABLE,
-  Item: cv,
+  Item: req.body,
  };
  console.log(params);
  try {
@@ -74,7 +73,7 @@ const createCV = async (req, res) => {
    "Access-Control-Allow-Origin": "*",
    "Access-Control-Allow-Credentials": true,
   });
-  res.json(cv);
+  res.json(req.body);
  } catch (error) {
   console.log(error);
   res.status(500).json({ error: "Could not create CV" });

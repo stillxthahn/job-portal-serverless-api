@@ -63,6 +63,7 @@ const login = async (req, res) => {
   const { Items } = await docClient.send(new ScanCommand(params));
   if (Items && Items.length > 0) {
    const parsedData = unmarshall(Items[0]);
+   console.log(parsedData);
    res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Credentials": true,
