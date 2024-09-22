@@ -94,8 +94,10 @@ const getJobsByCompanyId = async (req, res) => {
    ":i": { N: req.params.id },
   },
  };
+ console.log("PARAMS", params);
  try {
   const { Items } = await docClient.send(new ScanCommand(params));
+  console.log("ITEMS", Items);
   if (Items && Items.length > 0) {
    const unmarshalledItems = Items.map((item) => unmarshall(item));
    res.set({
