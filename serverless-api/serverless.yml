@@ -1,0 +1,65 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: xuanthanh
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: serverless-api
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: serverless-api
+
+stages:
+ default:
+  params:
+   tableName: "users-table-${sls:stage}"
+   tableCity: "job-portal-city"
+   tableCompany: "job-portal-company"
+   tableCvs: "job-portal-cvs"
+   tableJobs: "job-portal-jobs"
+   tableTags: "job-portal-tags"
+
+provider:
+ name: aws
+ runtime: nodejs20.x
+ iam:
+  role:
+   statements:
+    - Effect: Allow
+      Action:
+       - dynamodb:Query
+       - dynamodb:Scan
+       - dynamodb:GetItem
+       - dynamodb:PutItem
+       - dynamodb:UpdateItem
+       - dynamodb:DeleteItem
+      Resource:
+       - arn:aws:dynamodb:${aws:region}:*:table/${param:tableName}
+       - arn:aws:dynamodb:${aws:region}:*:table/${param:tableCity}
+       - arn:aws:dynamodb:${aws:region}:*:table/${param:tableCompany}
+       - arn:aws:dynamodb:${aws:region}:*:table/${param:tableCvs}
+       - arn:aws:dynamodb:${aws:region}:*:table/${param:tableJobs}
+       - arn:aws:dynamodb:${aws:region}:*:table/${param:tableTags}
+ environment:
+  USERS_TABLE: ${param:tableName}
+  CITY_TABLE: ${param:tableCity}
+  COMPANY_TABLE: ${param:tableCompany}
+  CVS_TABLE: ${param:tableCvs}
+  JOBS_TABLE: ${param:tableJobs}
+  TAGS_TABLE: ${param:tableTags}
+
+functions:
+ api:
+  handler: handler.handler
+  events:
+   - httpApi:
+      path: "*"
+      method: "*"
+      cors:
+       allowedOrigins:
+        - "*"
+       allowedHeaders:
+        - Content-Type
+        - Authorization
+       allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+       allowCredentials: false
